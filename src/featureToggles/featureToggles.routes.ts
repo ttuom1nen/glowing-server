@@ -9,7 +9,7 @@ const featureTogglesRouter = express.Router();
 featureTogglesRouter.get(
   "/toggles",
   async (req: Request, res: Response): Promise<void> => {
-    const featureToggles: FeatureToggle[] = await knex("FeatureToggle");
+    const featureToggles: FeatureToggle[] = await knex("feature_toggles");
 
     res.status(200).send(featureToggles);
   }
@@ -19,7 +19,7 @@ featureTogglesRouter.get(
   "/toggles/:id",
   async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
-    const toggles: FeatureToggle[] = await knex("FeatureToggle").select("*").where("FeatureToggle.id", id);
+    const toggles: FeatureToggle[] = await knex("feature_toggles").select("*").where("feature_toggles.id", id);
 
     if (!toggles.length) {
       res.status(404);
@@ -35,7 +35,7 @@ featureTogglesRouter.patch(
   async (req: Request, res: Response): Promise<void> => {
     const { id, is_on }: Toggle = req.body;
 
-    const updatedToggle = await knex("FeatureToggle").where({ id }).update(
+    const updatedToggle = await knex("feature_toggles").where({ id }).update(
       {
         is_on,
         modified_at: knex.fn.now(),
@@ -65,7 +65,7 @@ featureTogglesRouter.post(
       updated_at: knex.fn.now(),
     };
 
-    const id: number = await knex("FeatureToggle")
+    const id: number = await knex("feature_toggles")
       .insert(newToggle)
       .returning("id");
 
@@ -77,7 +77,7 @@ featureTogglesRouter.delete(
   "/toggles/:id",
   async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
-    const removedId: FeatureToggle[] = await knex("FeatureToggle").delete("*").where("FeatureToggle.id", id).returning("id");
+    const removedId: FeatureToggle[] = await knex("feature_toggles").delete("*").where("feature_toggles.id", id).returning("id");
 
     res.status(200).send(removedId);
   }

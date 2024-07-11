@@ -6,9 +6,6 @@ export const validateBody =
   async (req: Request, res: Response, next: NextFunction) => {
     const { body } = req;
 
-    console.log("validateBody");
-    console.log(body);
-
     try {
       await schema.validate(body);
 

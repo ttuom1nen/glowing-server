@@ -6,20 +6,16 @@ const baseURL = "http://localhost:3008";
 describe("Feature toggle endpoints", () => {
   describe("POST /toggles", () => {
     const newToggle = {
-      label: "created_by_test",
+      value: "created_by_test",
       description: "Description here",
       is_on: false,
     };
 
     it("returns the id of inserted toggle", async () => {
-      // const response = await db.from("users").select("name")
-
       const response = await request(baseURL)
         .post("/toggles")
         .set("Content-type", "application/json")
         .send(newToggle);
-
-      console.log(response.body);
 
       expect(response.body[0].hasOwnProperty("id")).toBe(true);
     });

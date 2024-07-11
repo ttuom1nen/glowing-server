@@ -2,7 +2,7 @@ import { Knex } from "knex";
 
 
 export async function up(knex: Knex): Promise<void> {
-    return knex.schema.createTable("FeatureToggle", (tbl) => {
+    return knex.schema.createTable("feature_toggles", (tbl) => {
         tbl.increments("id").primary();
         tbl.boolean("is_on").notNullable();
         tbl.string("value", 100).notNullable();
@@ -15,5 +15,5 @@ export async function up(knex: Knex): Promise<void> {
 
 
 export async function down(knex: Knex): Promise<void> {
-    return knex.schema.dropTableIfExists("FeatureToggle");
+    return knex.schema.dropTableIfExists("feature_toggles");
 }
