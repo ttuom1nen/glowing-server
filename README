@@ -1,0 +1,5 @@
+npm install -g knex
+
+knex migrate:make FeatureToggle -x ts
+
+knex migrate:latest
