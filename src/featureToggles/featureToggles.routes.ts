@@ -9,7 +9,7 @@ const featureTogglesRouter = express.Router();
 featureTogglesRouter.get(
   "/toggles",
   async (req: Request, res: Response): Promise<void> => {
-    const featureToggles: FeatureToggle[] = await knex("feature_toggle");
+    const featureToggles: FeatureToggle[] = await knex("FeatureToggle");
 
     res.status(200).send(featureToggles);
   }
@@ -19,7 +19,7 @@ featureTogglesRouter.get(
   "/toggles/:id",
   async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
-    const toggles: FeatureToggle[] = await knex("feature_toggle").select("*").where("feature_toggle.id", id);
+    const toggles: FeatureToggle[] = await knex("FeatureToggle").select("*").where("FeatureToggle.id", id);
 
     if (!toggles.length) {
       res.status(404);
@@ -35,19 +35,19 @@ featureTogglesRouter.patch(
   async (req: Request, res: Response): Promise<void> => {
     const { id, is_on }: Toggle = req.body;
 
-    const updatedTodo = await knex("feature_toggle").where({ id }).update(
+    const updatedToggle = await knex("FeatureToggle").where({ id }).update(
       {
         is_on,
-        updated_at: knex.fn.now(),
+        modified_at: knex.fn.now(),
       },
-      ["id", "is_on", "updated_at"]
+      ["id", "is_on", "modified_at"]
     );
 
-    if (!updatedTodo.length) {
+    if (!updatedToggle.length) {
       res.status(404);
     }
 
-    res.send(updatedTodo);
+    res.send(updatedToggle);
   }
 );
 
@@ -65,7 +65,7 @@ featureTogglesRouter.post(
       updated_at: knex.fn.now(),
     };
 
-    const id: number = await knex("feature_toggle")
+    const id: number = await knex("FeatureToggle")
       .insert(newToggle)
       .returning("id");
 
@@ -77,7 +77,7 @@ featureTogglesRouter.delete(
   "/toggles/:id",
   async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
-    const removedId: FeatureToggle[] = await knex("feature_toggle").delete("*").where("feature_toggle.id", id).returning("id");
+    const removedId: FeatureToggle[] = await knex("FeatureToggle").delete("*").where("FeatureToggle.id", id).returning("id");
 
     res.status(200).send(removedId);
   }

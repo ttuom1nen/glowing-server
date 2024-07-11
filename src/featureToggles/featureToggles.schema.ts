@@ -13,10 +13,11 @@ export const toggleSchema: SchemaOf<Toggle> = yup
 export const featureTogglesSchema: SchemaOf<FeatureToggle> = yup
   .object()
   .shape({
-    id: yup.number(),
-    label: yup.string().required(),
-    description: yup.string().required(),
+    id: yup.number().required(),
     is_on: yup.boolean().required(),
+    value: yup.string().required(),
+    description: yup.string(),
     created_at: yup.date(),
-    updated_at: yup.date()
+    modified_at: yup.date(),
+    toggled_by: yup.string()
   });
