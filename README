@@ -1,5 +1,8 @@
+Install Knex globally:
 npm install -g knex
 
-knex migrate:make FeatureToggle -x ts
+How to create a migration:
+knex migrate:make <migration_name> -x ts
 
+How to run latest migration:
 knex migrate:latest
