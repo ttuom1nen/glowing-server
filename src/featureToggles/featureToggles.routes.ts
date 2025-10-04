@@ -31,23 +31,26 @@ featureTogglesRouter.get(
 
 featureTogglesRouter.patch(
   "/toggles",
-  validateBody<Toggle>(toggleSchema),
   async (req: Request, res: Response): Promise<void> => {
     const { id, is_on }: Toggle = req.body;
 
-    const updatedToggle = await knex("feature_toggles").where({ id }).update(
-      {
-        is_on,
-        modified_at: knex.fn.now(),
-      },
-      ["id", "is_on", "modified_at"]
-    );
+    try {
+      const updatedToggle = await knex("feature_toggles").where({ id }).update(
+        {
+          is_on,
+          modified_at: knex.fn.now(),
+        },
+        ["id", "is_on", "modified_at"]
+      );
 
-    if (!updatedToggle.length) {
-      res.status(404);
+      if (!updatedToggle.length) {
+        res.status(404);
+      }
+
+      res.send(updatedToggle);
+    } catch (error) {
+      res.status(500).send(error);
     }
-
-    res.send(updatedToggle);
   }
 );
 
