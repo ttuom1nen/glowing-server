@@ -30,24 +30,28 @@ featureTogglesRouter.get(
 );
 
 featureTogglesRouter.patch(
-  "/toggles",
+  "/toggles/:id",
   async (req: Request, res: Response): Promise<void> => {
-    const { id, is_on }: Toggle = req.body;
+    const { id } = req.params;
+    const { is_on } = req.body as Partial<Toggle>;
 
     try {
-      const updatedToggle = await knex("feature_toggles").where({ id }).update(
-        {
-          is_on,
-          modified_at: knex.fn.now(),
-        },
-        ["id", "is_on", "modified_at"]
-      );
+      const updatedToggle = await knex("feature_toggles")
+        .where({ id })
+        .update(
+          {
+            is_on,
+            modified_at: knex.fn.now(),
+          },
+          ["id", "is_on", "modified_at"]
+        );
 
       if (!updatedToggle.length) {
-        res.status(404);
+        res.status(404).send({ message: "Toggle not found" });
+        return;
       }
 
-      res.send(updatedToggle);
+      res.status(200).send(updatedToggle);
     } catch (error) {
       res.status(500).send(error);
     }
